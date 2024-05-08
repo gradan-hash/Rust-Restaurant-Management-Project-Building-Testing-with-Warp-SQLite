@@ -1,5 +1,43 @@
 
-async fn handle_rejection(){}
+use crate::handlers::{
+  create_order_handler,
+  list_tables_handler,
+  create_table_handler,
+  list_menu_handler,
+  create_menu_handler,
+  list_order_handler,
+  delete_item_from_order_handler,
+  list_order_items_for_table_handler,
+  get_order_item_for_table_handler
+
+};
+
+use warp::{Filter,Rejection,Reply};
+use rusqlite::Connection;
+use crate::db::get_db_conn;
+use std::convert::Infallible;
+
+async fn handle_rejection(err :Rejection-> Result<impl Reply,Rejection>){
+
+  if err.if_not_found(){
+    Ok(warp::reply::with_status(
+      warp::reply::json(&format!("Error: {:?}", err)),
+      warp::http::StatusCode::NOT_FOUND,
+      
+    ))
+
+  }else if let_some(_) =err.find::<warp::filters::body::BodyDeserializeError>(){
+    Ok(warp::reply::with_status(
+      warp::reply::json(&format! ("Error: Failed to deserialize Body")),
+      warp::http::StatusCode::BAD_REQUEST,
+    ))
+  } else {
+    Ok(warp:reply_with_status(
+      warp_reply_json(&format!("Error: {:?}", err)),
+      warp::http::StatusCode::INTERNAL_SERVER_ERROR,
+    ))
+  }
+}
 
 pub fn list_all_order_route(){}
 
