@@ -1,7 +1,11 @@
 
 
-
+use rusqlite::params;
 use serde;
+use rusqlite::Connection;
+use serde::(Serialize,Deserialize)
+
+
 #[derive(Debug,Serialize,Deserialize)]
 pub struct Table{
   #[serde(skip)]
@@ -67,3 +71,15 @@ pub struct OrderItemResponse{
   pub cooking_time :i64,
   pub quantity :i64,
 }
+
+impl Table{}
+
+
+impl Menu{}
+
+
+impl OrderResponse{}
+
+impl OrderItem{}
+
+
