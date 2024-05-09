@@ -39,28 +39,89 @@ async fn handle_rejection(err :Rejection-> Result<impl Reply,Rejection>){
   }
 }
 
-pub fn list_all_order_route(){}
-
-pub fn create_order_route(){}
-
-pub fn delete_item_from_order_route(){}
-
-pub fn  list_tables_route(){}
 
 
-pub fn create_order_route(){}
-
-pub fn create_table_route(){}
-pub fn list_order_items_for_table_route(){}
-
-
-pub fn get_item_from_order_route(){}
+fn with_db()->impl Filter<Extract = (Connection,), Error =Infallible> + Clone{
+  warp::any().map(|| get_db_conn())
+}
 
 
-pub fn list_menus_route(){}
 
 
-pub create_menu_route(){}
+pub fn list_all_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn));
+} 
+
+pub fn create_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders"/"create")
+  .and (warp::get())
+  .and (with_db())
+  .and(warp::body::json())
+  .and_then(|conn,req_body| create_order_handler(conn,req_body))
+} 
+
+pub fn delete_item_from_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders"/i64/"items"/i64)
+  .and (warp::delete())
+  .and (with_db())
+  .and_then(|conn,table_id,menu_id| delete_item_from_order_handler(conn,table_id,menu_id))
+} 
+
+pub fn  list_tables_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
+
+
+pub fn create_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
+
+pub fn create_table_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
+
+pub fn list_order_items_for_table_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
+
+
+pub fn get_item_from_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
+
+
+pub fn list_menus_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
+
+
+pub create_menu_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
+  return warp::path!("orders")
+  .and (warp::get())
+  .and (with_db())
+  .and_then(|conn| list_order_handler(conn))
+} 
 
 
 
