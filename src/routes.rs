@@ -57,7 +57,7 @@ pub fn list_all_order_route()-> impl Filter<Extract = impl Reply,Error= Rejectio
 
 pub fn create_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
   return warp::path!("orders"/"create")
-  .and (warp::get())
+  .and (warp::post())
   .and (with_db())
   .and(warp::body::json())
   .and_then(|conn,req_body| create_order_handler(conn,req_body))
@@ -80,7 +80,7 @@ pub fn  list_tables_route()-> impl Filter<Extract = impl Reply,Error= Rejection 
 //
 pub fn create_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
   return warp::path!("tables"/"create")
-  .and(warp::get())
+  .and(warp::post())
   .and(with_db())
   .and(warp::body::json())
   .and_then(|conn,req.body| create_table_handler(conn,req.body))
@@ -91,8 +91,8 @@ pub fn create_order_route()-> impl Filter<Extract = impl Reply,Error= Rejection 
 
 pub fn list_order_items_for_table_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
   return warp::path!("tables"/i64/"items")
-  .and (warp::get())
-  .and (with_db())
+  .and(warp::get())
+  .and(with_db())
   .and_then(|table_id,conn| list_order_items_for_table_handler(conn,table_id))
 } 
 
@@ -115,10 +115,10 @@ pub fn list_menus_route()-> impl Filter<Extract = impl Reply,Error= Rejection > 
 
 pub create_menu_route()-> impl Filter<Extract = impl Reply,Error= Rejection > + Clone{
   return warp::path!("menus"/"create")
-  .and(warp::get())
+  .and(warp::post())
   .and(with_db())
   and(warp::body::json())
-  .and_then(|conn| create_menu_handler(conn))
+  .and_then(|conn,req_body| create_menu_handler(conn,req.body))
 } 
 
 
